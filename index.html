@@ -24,7 +24,6 @@
             box-shadow: 0 0 20px rgba(0,0,0,0.1);
             padding: 20px;
             border-radius: 8px;
-            box-sizing: border-box;
         }
 
         .invoice-header {
@@ -101,66 +100,9 @@
                 padding: 8px;
             }
 
-            .invoice-details input {
-                padding: 6px;
-            }
-
             .btn {
                 width: 100%;
                 margin-bottom: 10px;
-            }
-
-            .invoice-container {
-                padding: 15px;
-            }
-
-            .invoice-header div {
-                font-size: 12px;
-            }
-
-            .invoice-header input {
-                font-size: 14px;
-                margin: 5px 0;
-            }
-
-            .invoice-footer {
-                text-align: center;
-            }
-
-            table {
-                width: 100%;
-                border: 0;
-            }
-
-            th, td {
-                display: block;
-                width: 100%;
-                box-sizing: border-box;
-            }
-
-            td {
-                border: 0;
-                padding: 8px;
-                position: relative;
-            }
-
-            td::before {
-                content: attr(data-label);
-                position: absolute;
-                left: 0;
-                width: 50%;
-                padding: 8px;
-                font-weight: bold;
-                background: #f5f5f5;
-                border-right: 1px solid #e0e0e0;
-            }
-
-            td:last-child::before {
-                border-right: none;
-            }
-
-            th {
-                display: none;
             }
         }
     </style>
@@ -182,6 +124,7 @@
                     <th>Date</th>
                     <th>Item</th>
                     <th>Type</th>
+                    
                     <th>Unit Price</th>
                     <th>Hours</th>
                     <th>Tax</th>
@@ -190,13 +133,13 @@
             </thead>
             <tbody>
                 <tr>
-                    <td><input type="date" class="date"></td>
+                     <td><input type="date" class="date"></td>
                     <td><input type="text" class="item"></td>
                     <td><input type="text" class="type"></td>
-                    <td><input type="number" class="unit-price" oninput="calculateTotal(this)"></td>
+                <td><input type="number" class="unit-price" oninput="calculateTotal(this)"></td>
                     <td><input type="number" class="hours" oninput="calculateTotal(this)"></td>
                     <td><input type="number" class="tax" oninput="calculateTotal(this)"></td>
-                    <td class="total-price">$ 0</td>
+                    <td class="total-price"> $ 0</td>
                 </tr>
             </tbody>
         </table>
@@ -213,76 +156,121 @@
             const hours = parseFloat(row.querySelector('.hours').value) || 0;
             const tax = parseFloat(row.querySelector('.tax').value) || 0;
             const totalPrice = (unitPrice * hours) + tax;
-            row.querySelector('.total-price').textContent = `$ ${totalPrice.toFixed(2)}`;
+            row.querySelector('.total-price').textContent = totalPrice.toFixed(2);
         }
 
         function addItem() {
             const table = document.getElementById('invoiceTable').querySelector('tbody');
             const newRow = document.createElement('tr');
-            newRow.innerHTML = `
-                <td><input type="date" class="date"></td>
+            newRow.innerHTML = 
+             <td><input type="date" class="date"></td>
                 <td><input type="text" class="item"></td>
                 <td><input type="text" class="type"></td>
+               
                 <td><input type="number" class="unit-price" oninput="calculateTotal(this)"></td>
                 <td><input type="number" class="hours" oninput="calculateTotal(this)"></td>
                 <td><input type="number" class="tax" oninput="calculateTotal(this)"></td>
-                <td class="total-price">$ 0</td>
-            `;
+                <td class="total-price"> $ 0</td>
+            ;
             table.appendChild(newRow);
         }
 
         function generatePDF() {
-            const invoiceNo = document.getElementById('invoiceNo').value;
-            const invoiceDate = document.getElementById('invoiceDate').value;
+    const invoiceNo = document.getElementById('invoiceNo').value;
+    const invoiceDate = document.getElementById('invoiceDate').value;
 
-            const rows = document.querySelectorAll('#invoiceTable tbody tr');
-            let itemsHTML = '';
-            let totalTax = 0;
-            let totalAmount = 0;
+    const rows = document.querySelectorAll('#invoiceTable tbody tr');
+    let itemsHTML = '';
+    let totalTax = 0;
+    let totalAmount = 0;
 
-            rows.forEach(row => {
-                const date = row.querySelector('.date').value;
-                const item = row.querySelector('.item').value;
-                const type = row.querySelector('.type').value;
-                const unitPrice = parseFloat(row.querySelector('.unit-price').value) || 0;
-                const hours = parseFloat(row.querySelector('.hours').value) || 0;
-                const tax = parseFloat(row.querySelector('.tax').value) || 0;
-                const totalPrice = parseFloat(row.querySelector('.total-price').textContent.replace('$ ', '')) || 0;
-                
-                totalTax += tax;
-                totalAmount += totalPrice;
+    rows.forEach(row => {
+        const date = row.querySelector('.date').value;
+        const item = row.querySelector('.item').value;
+        const type = row.querySelector('.type').value;
+        const unitPrice = parseFloat(row.querySelector('.unit-price').value) || 0;
+        const hours = parseFloat(row.querySelector('.hours').value) || 0;
+        const tax = parseFloat(row.querySelector('.tax').value) || 0;
+        const totalPrice = parseFloat(row.querySelector('.total-price').textContent.replace('$ ', '')) || 0;
+        
+        totalTax += tax;
+        totalAmount += totalPrice;
 
-                itemsHTML += `
-                    <tr style="border: 1px solid #e0e0e0;">
-                        <td style="padding: 10px; border: 1px solid #000000; text-align: center; vertical-align: middle;">${date}</td>
-                        <td style="padding: 10px; border: 1px solid #000000; text-align: center; vertical-align: middle;">${item}</td>
-                        <td style="padding: 10px; border: 1px solid #000000; text-align: center; vertical-align: middle;">${type}</td>
-                        <td style="padding: 10px; border: 1px solid #000000; text-align: center; vertical-align: middle;">${unitPrice.toFixed(2)}</td>
-                        <td style="padding: 10px; border: 1px solid #000000; text-align: center; vertical-align: middle;">${hours}</td>
-                        <td style="padding: 10px; border: 1px solid #000000; text-align: center; vertical-align: middle;">${tax.toFixed(2)}</td>
-                        <td style="padding: 10px; border: 1px solid #000000; text-align: center; vertical-align: middle;">${totalPrice.toFixed(2)}</td>
-                    </tr>
-                `;
-            });
+        itemsHTML += 
+            <tr style="border: 1px solid #e0e0e0;">
+                <td style="padding: 10px; border: 1px solid #000000; text-align: center; vertical-align: middle;">${date}</td>
+                <td style="padding: 10px; border: 1px solid #000000; text-align: center; vertical-align: middle;">${item}</td>
+                <td style="padding: 10px; border: 1px solid #000000; text-align: center; vertical-align: middle;">${type}</td>
+                <td style="padding: 10px; border: 1px solid #000000; text-align: center; vertical-align: middle;">${unitPrice.toFixed(2)}</td>
+                <td style="padding: 10px; border: 1px solid #000000; text-align: center; vertical-align: middle;">${hours}</td>
+                <td style="padding: 10px; border: 1px solid #000000; text-align: center; vertical-align: middle;">${tax.toFixed(2)}</td>
+                <td style="padding: 10px; border: 1px solid #000000; text-align: center; vertical-align: middle;">$ ${totalPrice.toFixed(2)}</td>
+            </tr>
+        ;
+    });
 
-            const doc = new jsPDF();
-            doc.text(`Invoice No: ${invoiceNo}`, 20, 20);
-            doc.text(`Date: ${invoiceDate}`, 20, 30);
+    const outstandingBalance = totalAmount - totalTax;
 
-            doc.autoTable({
-                startY: 40,
-                head: [['Date', 'Item', 'Type', 'Unit Price', 'Hours', 'Tax', 'Total Price']],
-                body: itemsHTML.split('</tr>').map(row => row.replace(/<\/td>/g, '').split('<td>').slice(1)),
-                styles: { fillColor: [255, 255, 255], cellPadding: 5 },
-                headStyles: { fillColor: [200, 200, 200] }
-            });
+    const invoiceHTML = 
+        <div style="text-align: center;">
+            <div>
+                <p style="font-size: 22px; text-align: right;"><strong>Tax Invoice # ${invoiceNo}</strong></p>
+                <p style="margin: 0; padding: 0; font-size: 15px; text-align: right;"><strong>Practioner: </strong>Mrs. Pratikshya Bhattarai</p>
+                <p style="margin: 0; padding: 0; font-size: 15px; text-align: right;">Therapy Assistant</p>
+                <p style="margin: 0; padding: 0; font-size: 15px; text-align: right;">Date: ${invoiceDate}</p>
+                <p style="margin: 0; padding: 0; font-size: 15px; text-align: left;">ABN 92 994 636 709</p>
+                <p style="margin: 0; padding: 0; font-size: 15px; text-align: left;">Phone: 0420586934</p>
+                <p style="margin: 0; padding: 0; font-size: 15px; text-align: left;">Email: bhattaraipratikshya123@gmail.com</p><br>
+                <p style="margin: 0; padding: 0; font-size: 15px; text-align: left;"><strong>Invoice to:</strong></p>
+                <p style="margin: 0; padding: 0; font-size: 15px; text-align: left;">Master Aarav Thapa</p>
+                <p style="margin: 0; padding: 0; font-size: 15px; text-align: left;">24 Midnight Ave</p>
+                <p style="margin: 0; padding: 0; font-size: 15px; text-align: left;">Caddens NSW 2747, Australia</p><br>
+                <p style="margin: 0; padding: 0; font-size: 15px; text-align: left;"><strong>Client:</strong></p>
+                <p style="margin: 0; padding: 0; font-size: 15px; text-align: left;">Master Aarav Thapa</p>
+            </div>
+        </div>
+        <table style="width: 100%; border-collapse: collapse; margin-top: 20px; items-align:center;">
+            <thead>
+                <tr>
+                    <th style="border: 1px solid #000000; padding: 12px; text-align: center; background-color: #f5f5f5;">Date</th>
+                    <th style="border: 1px solid #000000; padding: 12px; text-align: center; background-color: #f5f5f5;">Item</th>
+                    <th style="border: 1px solid #000000; padding: 12px; text-align: center; background-color: #f5f5f5;">Type</th>
+                    <th style="border: 1px solid #000000; padding: 12px; text-align: center; background-color: #f5f5f5;">Unit Price</th>
+                    <th style="border: 1px solid #000000; padding: 12px; text-align: center; background-color: #f5f5f5;">Hours</th>
+                    <th style="border: 1px solid #000000; padding: 12px; text-align: center; background-color: #f5f5f5;">Tax</th>
+                    <th style="border: 1px solid #000000; padding: 12px; text-align: center; background-color: #f5f5f5;">Total Price</th>
+                </tr>
+            </thead>
+            <tbody>
+                ${itemsHTML}
+            </tbody>
+        </table>
+        <br>
+        <br>
+        <p style="font-size: 18px; text-align: right;"><strong>Tax: </strong>$ ${totalTax.toFixed(2)}</p>
+        <p style="font-size: 18px; text-align: right;"><strong>Total Amount: </strong>$ ${totalAmount.toFixed(2)}</p>
+        <p style="font-size: 18px; text-align: right;"><strong>Outstanding Balance: </strong>$ ${outstandingBalance.toFixed(2)}</p>
+        <div style="text-align: center;">
+            <p style="font-size: 14px; text-align:center;">Bank: ANZ</p>
+            <p style="font-size: 14px; text-align:center;">BSB: 012370</p>
+            <p style="font-size: 14px; text-align:center;">Account: 154730647</p><br><br>
+           
+                <p style="font-size: 10px; margin: 0; text-align: center; color: #B0B0B0; ">This is an auto-generated invoice and doesn't bear any signature.</p>
+           
+        </div>
+    ;
 
-            doc.text(`Tax: ${totalTax.toFixed(2)}`, 20, doc.autoTable.previous.finalY + 10);
-            doc.text(`Total Amount: ${totalAmount.toFixed(2)}`, 20, doc.autoTable.previous.finalY + 20);
-            doc.text(`Outstanding Balance: ${totalAmount.toFixed(2)}`, 20, doc.autoTable.previous.finalY + 30);
+    const element = document.createElement('div');
+    element.innerHTML = invoiceHTML;
+    html2pdf().from(element).set({
+        margin: 1,
+        filename: pratikshya_invoice_${invoiceNo}.pdf,
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2 },
+        jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+    }).save();
+}
 
-            doc.save(`invoice_${invoiceNo}.pdf`);
-        }
     </script>
 </body>
 </html>
