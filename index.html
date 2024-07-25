@@ -163,9 +163,10 @@
             const table = document.getElementById('invoiceTable').querySelector('tbody');
             const newRow = document.createElement('tr');
             newRow.innerHTML = `
+             <td><input type="date" class="date"></td>
                 <td><input type="text" class="item"></td>
                 <td><input type="text" class="type"></td>
-                <td><input type="date" class="date"></td>
+               
                 <td><input type="number" class="unit-price" oninput="calculateTotal(this)"></td>
                 <td><input type="number" class="hours" oninput="calculateTotal(this)"></td>
                 <td><input type="number" class="tax" oninput="calculateTotal(this)"></td>
@@ -181,9 +182,10 @@
             const rows = document.querySelectorAll('#invoiceTable tbody tr');
             let itemsHTML = '';
             rows.forEach(row => {
+                const date = row.querySelector('.date').value;
                 const item = row.querySelector('.item').value;
                 const type = row.querySelector('.type').value;
-                const date = row.querySelector('.date').value;
+                
                 const unitPrice = row.querySelector('.unit-price').value;
                 const hours = row.querySelector('.hours').value;
                 const tax = row.querySelector('.tax').value;
@@ -191,9 +193,10 @@
                 
                 itemsHTML += `
                     <tr>
+                      <td>${date}</td>
                         <td>${item}</td>
                         <td>${type}</td>
-                        <td>${date}</td>
+
                         <td>${unitPrice}</td>
                         <td>${hours}</td>
                         <td>${tax}</td>
