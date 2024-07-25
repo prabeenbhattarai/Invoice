@@ -136,9 +136,9 @@
                      <td><input type="date" class="date"></td>
                     <td><input type="text" class="item"></td>
                     <td><input type="text" class="type"></td>
-                <td><input type="number" class="unit-price" oninput="calculateTotal(this)"></td>
+                <td><input type="number" class="unit-price" oninput="calculateTotal(this)">$</td>
                     <td><input type="number" class="hours" oninput="calculateTotal(this)"></td>
-                    <td><input type="number" class="tax" oninput="calculateTotal(this)"></td>
+                    <td><input type="number" class="tax" oninput="calculateTotal(this)">$</td>
                     <td class="total-price"> $ 0</td>
                 </tr>
             </tbody>
@@ -204,9 +204,9 @@
 
             const invoiceHTML = `
                 <div style="text-align: center;">
-                    <h1>Invoice</h1>
                    
-<div style="display: flex; justify-content: space-between; align-items: center;">
+                   
+<div>
                       <p style=" margin-left: auto; font-size: 18px;"> <strong>Tax Invoice #${invoiceNo}</strong> </p><br>
                      <p style="margin-left: auto; font-size: 16px;"> <strong>Practioner </strong> Mrs. Pratikshya Bhattarai</p><br>
                       <p style="margin-right: auto; font-size: 16px;">ABN 92 994 636 709</p><br>
