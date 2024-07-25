@@ -243,16 +243,13 @@
 
     const element = document.createElement('div');
     element.innerHTML = invoiceHTML;
-    document.body.appendChild(element);
-
-    html2pdf().from(element).toPdf().get('pdf').then(pdf => {
-        pdf.autoPrint();
-        pdf.output('dataurlnewwindow');
-        document.body.removeChild(element);
-    }).catch(error => {
-        console.error('PDF generation error:', error);
-    });
-}
+    html2pdf().from(element).set({
+        margin: 1,
+        filename: pratikshya_invoice_${invoiceNo}.pdf,
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2 },
+        jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+    }).save();
 
     </script>
 </body>
