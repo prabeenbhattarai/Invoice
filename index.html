@@ -147,7 +147,7 @@
             <button class="btn" onclick="generatePDF()">Generate Invoice</button>
         </div>
     </div>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"></script>
     <script>
         function calculateTotal(element) {
             const row = element.closest('tr');
@@ -173,84 +173,87 @@
             table.appendChild(newRow);
         }
 
-        function generatePDF() {
-            const invoiceNo = document.getElementById('invoiceNo').value;
-            const invoiceDate = document.getElementById('invoiceDate').value;
+       function generatePDF() {
+    const invoiceNo = document.getElementById('invoiceNo').value;
+    const invoiceDate = document.getElementById('invoiceDate').value;
 
-            const rows = document.querySelectorAll('#invoiceTable tbody tr');
-            let itemsHTML = '';
-            let totalTax = 0;
-            let totalAmount = 0;
+    const rows = document.querySelectorAll('#invoiceTable tbody tr');
+    let itemsHTML = '';
+    let totalTax = 0;
+    let totalAmount = 0;
 
-            rows.forEach(row => {
-                const date = row.querySelector('.date').value;
-                const item = row.querySelector('.item').value;
-                const type = row.querySelector('.type').value;
-                const unitPrice = parseFloat(row.querySelector('.unit-price').value) || 0;
-                const hours = parseFloat(row.querySelector('.hours').value) || 0;
-                const tax = parseFloat(row.querySelector('.tax').value) || 0;
-                const totalPrice = parseFloat(row.querySelector('.total-price').textContent.replace('$ ', '')) || 0;
-                
-                totalTax += tax;
-                totalAmount += totalPrice;
+    rows.forEach(row => {
+        const date = row.querySelector('.date').value;
+        const item = row.querySelector('.item').value;
+        const type = row.querySelector('.type').value;
+        const unitPrice = parseFloat(row.querySelector('.unit-price').value) || 0;
+        const hours = parseFloat(row.querySelector('.hours').value) || 0;
+        const tax = parseFloat(row.querySelector('.tax').value) || 0;
+        const totalPrice = parseFloat(row.querySelector('.total-price').textContent.replace('$ ', '')) || 0;
+        
+        totalTax += tax;
+        totalAmount += totalPrice;
 
-                itemsHTML += `
-                    <tr style="border: 1px solid #e0e0e0;">
-                        <td style="padding: 10px; border: 1px solid #000000; text-align: center; vertical-align: middle;">${date}</td>
-                        <td style="padding: 10px; border: 1px solid #000000; text-align: center; vertical-align: middle;">${item}</td>
-                        <td style="padding: 10px; border: 1px solid #000000; text-align: center; vertical-align: middle;">${type}</td>
-                        <td style="padding: 10px; border: 1px solid #000000; text-align: center; vertical-align: middle;">${unitPrice.toFixed(2)}</td>
-                        <td style="padding: 10px; border: 1px solid #000000; text-align: center; vertical-align: middle;">${hours}</td>
-                        <td style="padding: 10px; border: 1px solid #000000; text-align: center; vertical-align: middle;">${tax.toFixed(2)}</td>
-                        <td style="padding: 10px; border: 1px solid #000000; text-align: center; vertical-align: middle;">$ ${totalPrice.toFixed(2)}</td>
-                    </tr>
-                `;
-            });
+        itemsHTML += `
+            <tr style="border: 1px solid #e0e0e0;">
+                <td style="padding: 10px; border: 1px solid #000000; text-align: center; vertical-align: middle;">${date}</td>
+                <td style="padding: 10px; border: 1px solid #000000; text-align: center; vertical-align: middle;">${item}</td>
+                <td style="padding: 10px; border: 1px solid #000000; text-align: center; vertical-align: middle;">${type}</td>
+                <td style="padding: 10px; border: 1px solid #000000; text-align: center; vertical-align: middle;">${unitPrice.toFixed(2)}</td>
+                <td style="padding: 10px; border: 1px solid #000000; text-align: center; vertical-align: middle;">${hours}</td>
+                <td style="padding: 10px; border: 1px solid #000000; text-align: center; vertical-align: middle;">${tax.toFixed(2)}</td>
+                <td style="padding: 10px; border: 1px solid #000000; text-align: center; vertical-align: middle;">$ ${totalPrice.toFixed(2)}</td>
+            </tr>
+        `;
+    });
 
-            const outstandingBalance = totalAmount - totalTax;
+    const outstandingBalance = totalAmount - totalTax;
 
-            const invoiceHTML = `
-                <div style="text-align: center;">
-                    <div>
-                        <p style="font-size: 22px; text-align: right;"><strong>Tax Invoice # ${invoiceNo}</strong></p>
-                        <p style="margin: 0; padding: 0; font-size: 15px; text-align: right;"><strong>Practioner: </strong>Pratikshya Subedi</p>
-                        <p style="margin: 0; padding: 0; font-size: 15px; text-align: right;"><strong>Address: </strong>Bhaktapur</p>
-                        <p style="margin: 0; padding: 0; font-size: 15px; text-align: right;"><strong>Date: </strong>${invoiceDate}</p>
-                    </div>
-                </div>
-                <table style="width: 100%; border-collapse: collapse;">
-                    <thead>
-                        <tr style="background-color: #f5f5f5;">
-                            <th style="padding: 10px; border: 1px solid #000000; text-align: center;">Date</th>
-                            <th style="padding: 10px; border: 1px solid #000000; text-align: center;">Item</th>
-                            <th style="padding: 10px; border: 1px solid #000000; text-align: center;">Type</th>
-                            <th style="padding: 10px; border: 1px solid #000000; text-align: center;">Unit Price</th>
-                            <th style="padding: 10px; border: 1px solid #000000; text-align: center;">Hours</th>
-                            <th style="padding: 10px; border: 1px solid #000000; text-align: center;">Tax</th>
-                            <th style="padding: 10px; border: 1px solid #000000; text-align: center;">Total Price</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        ${itemsHTML}
-                    </tbody>
-                </table>
-                <div style="margin-top: 20px;">
-                    <p style="font-size: 16px; text-align: right;"><strong>Total Tax: </strong>$ ${totalTax.toFixed(2)}</p>
-                    <p style="font-size: 16px; text-align: right;"><strong>Total Amount: </strong>$ ${totalAmount.toFixed(2)}</p>
-                    <p style="font-size: 16px; text-align: right;"><strong>Outstanding Balance: </strong>$ ${outstandingBalance.toFixed(2)}</p>
-                </div>
-            `;
+    const invoiceHTML = `
+        <div style="text-align: center;">
+            <div>
+                <p style="font-size: 22px; text-align: right;"><strong>Tax Invoice # ${invoiceNo}</strong></p>
+                <p style="margin: 0; padding: 0; font-size: 15px; text-align: right;"><strong>Practioner: </strong>Pratikshya Subedi</p>
+                <p style="margin: 0; padding: 0; font-size: 15px; text-align: right;"><strong>Address: </strong>Bhaktapur</p>
+                <p style="margin: 0; padding: 0; font-size: 15px; text-align: right;"><strong>Date: </strong>${invoiceDate}</p>
+            </div>
+        </div>
+        <table style="width: 100%; border-collapse: collapse;">
+            <thead>
+                <tr style="background-color: #f5f5f5;">
+                    <th style="padding: 10px; border: 1px solid #000000; text-align: center;">Date</th>
+                    <th style="padding: 10px; border: 1px solid #000000; text-align: center;">Item</th>
+                    <th style="padding: 10px; border: 1px solid #000000; text-align: center;">Type</th>
+                    <th style="padding: 10px; border: 1px solid #000000; text-align: center;">Unit Price</th>
+                    <th style="padding: 10px; border: 1px solid #000000; text-align: center;">Hours</th>
+                    <th style="padding: 10px; border: 1px solid #000000; text-align: center;">Tax</th>
+                    <th style="padding: 10px; border: 1px solid #000000; text-align: center;">Total Price</th>
+                </tr>
+            </thead>
+            <tbody>
+                ${itemsHTML}
+            </tbody>
+        </table>
+        <div style="margin-top: 20px;">
+            <p style="font-size: 16px; text-align: right;"><strong>Total Tax: </strong>$ ${totalTax.toFixed(2)}</p>
+            <p style="font-size: 16px; text-align: right;"><strong>Total Amount: </strong>$ ${totalAmount.toFixed(2)}</p>
+            <p style="font-size: 16px; text-align: right;"><strong>Outstanding Balance: </strong>$ ${outstandingBalance.toFixed(2)}</p>
+        </div>
+    `;
 
-            const element = document.createElement('div');
-            element.innerHTML = invoiceHTML;
-            document.body.appendChild(element);
+    const element = document.createElement('div');
+    element.innerHTML = invoiceHTML;
+    document.body.appendChild(element);
 
-            html2pdf().from(element).toPdf().get('pdf').then(pdf => {
-                pdf.autoPrint();
-                pdf.output('dataurlnewwindow');
-                document.body.removeChild(element);
-            });
-        }
+    html2pdf().from(element).toPdf().get('pdf').then(pdf => {
+        pdf.autoPrint();
+        pdf.output('dataurlnewwindow');
+        document.body.removeChild(element);
+    }).catch(error => {
+        console.error('PDF generation error:', error);
+    });
+}
+
     </script>
 </body>
 </html>
