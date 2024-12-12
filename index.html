@@ -201,56 +201,80 @@
                         <td style="padding: 10px; border: 1px solid #000000; text-align: center;">${supportItemNo}</td>
                         <td style="padding: 10px; border: 1px solid #000000; text-align: center;">${supportItemName}</td>
                         <td style="padding: 10px; border: 1px solid #000000; text-align: center;">${serviceGroupName}</td>
-                        <td style="padding: 10px; border: 1px solid #000000; text-align: center;">${budgetCategory}</td>
-                        <td style="padding: 10px; border: 1px solid #000000; text-align: center;">$ ${unitPrice.toFixed(2)}</td>
-                        <td style="padding: 10px; border: 1px solid #000000; text-align: center;">${hours}</td>
-                        <td style="padding: 10px; border: 1px solid #000000; text-align: center;">$ ${totalPrice.toFixed(2)}</td>
-                    </tr>
-                `;
-            });
+                                                <td style="padding: 10px; border: 1px solid #000000; text-align: center;">${budgetCategory}</td>
 
-            const htmlContent = `
-                <div style="font-family: Arial, sans-serif; width: 100%; text-align: center; margin-bottom: 20px;">
-                    <h2 style="margin: 0;">Childcare Invoice</h2>
-                    <p>Invoice No: ${invoiceNo}</p>
-                    <p>Date: ${invoiceDate}</p>
-                </div>
-                <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
-                    <thead>
-                        <tr style="background-color: #f5f5f5; border: 1px solid #000000;">
-                            <th style="padding: 10px; border: 1px solid #000000;">Date</th>
-                            <th style="padding: 10px; border: 1px solid #000000;">Support Item No.</th>
-                            <th style="padding: 10px; border: 1px solid #000000;">Support Item Name</th>
-                            <th style="padding: 10px; border: 1px solid #000000;">Service Group Name</th>
-                            <th style="padding: 10px; border: 1px solid #000000;">Budget Category</th>
-                            <th style="padding: 10px; border: 1px solid #000000;">Unit Price</th>
-                            <th style="padding: 10px; border: 1px solid #000000;">Hours</th>
-                            <th style="padding: 10px; border: 1px solid #000000;">Total Price</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        ${itemsHTML}
-                    </tbody>
-                </table>
-                <div style="font-size: 18px; font-weight: bold; text-align: right;">
-                    <p>Total Amount: $ ${totalAmount.toFixed(2)}</p>
-                </div>
-            `;
+ <td style="padding: 10px; border: 1px solid #000000; text-align: center; vertical-align: middle;">${unitPrice}</td>
+  <td style="padding: 10px; border: 1px solid #000000; text-align: center; vertical-align: middle;">${hours}</td>
 
-            const element = document.createElement('div');
-            element.innerHTML = htmlContent;
+                <td style="padding: 10px; border: 1px solid #000000; text-align: center; vertical-align: middle;">$ ${totalPrice.toFixed(2)}</td>
+            </tr>
+        ;
+    });
 
-            html2pdf()
-                .set({
-                    margin: 10,
-                    filename: `Invoice_${invoiceNo || 'Generated'}.pdf`,
-                    html2canvas: { scale: 2 },
-                    jsPDF: { orientation: 'portrait' }
-                })
-                .from(element)
-                .save();
-        }
+    const outstandingBalance = totalAmount - totalTax;
+
+    const invoiceHTML = 
+        <div style="text-align: center;">
+            <div>
+                <p style="font-size: 22px; text-align: right;"><strong>Tax Invoice # ${invoiceNo}</strong></p>
+                <p style="margin: 0; padding: 0; font-size: 15px; text-align: right;"><strong>Practioner: </strong>Mrs. Pratikshya Bhattarai</p>
+                <p style="margin: 0; padding: 0; font-size: 15px; text-align: right;">Therapy Assistant</p>
+                <p style="margin: 0; padding: 0; font-size: 15px; text-align: right;">Date: ${invoiceDate}</p>
+                                <p style="margin: 0; padding: 0; font-size: 15px; text-align: left;">NDIS 431388291</p>
+
+                <p style="margin: 0; padding: 0; font-size: 15px; text-align: left;">ABN 92 994 636 709</p>
+                <p style="margin: 0; padding: 0; font-size: 15px; text-align: left;">Phone: 0420586934</p>
+                <p style="margin: 0; padding: 0; font-size: 15px; text-align: left;">Email: bhattaraipratikshya123@gmail.com</p><br>
+                <p style="margin: 0; padding: 0; font-size: 15px; text-align: left;"><strong>Invoice to:</strong></p>
+                <p style="margin: 0; padding: 0; font-size: 15px; text-align: left;">Master Aarav Thapa</p>
+                <p style="margin: 0; padding: 0; font-size: 15px; text-align: left;">24 Midnight Ave</p>
+                <p style="margin: 0; padding: 0; font-size: 15px; text-align: left;">Caddens NSW 2747, Australia</p><br>
+                <p style="margin: 0; padding: 0; font-size: 15px; text-align: left;"><strong>Client:</strong></p>
+                <p style="margin: 0; padding: 0; font-size: 15px; text-align: left;">Master Aarav Thapa</p>
+            </div>
+        </div>
+        <table style="width: 100%; border-collapse: collapse; margin-top: 20px; items-align:center;">
+            <thead>
+                <tr>
+                    <th style="border: 1px solid #000000; padding: 12px; text-align: center; background-color: #f5f5f5;">Date</th>
+                    <th style="border: 1px solid #000000; padding: 12px; text-align: center; background-color: #f5f5f5;">Item</th>
+                    <th style="border: 1px solid #000000; padding: 12px; text-align: center; background-color: #f5f5f5;">Type</th>
+                    <th style="border: 1px solid #000000; padding: 12px; text-align: center; background-color: #f5f5f5;">Unit Price</th>
+                    <th style="border: 1px solid #000000; padding: 12px; text-align: center; background-color: #f5f5f5;">Hours</th>
+                    <th style="border: 1px solid #000000; padding: 12px; text-align: center; background-color: #f5f5f5;">Tax</th>
+                    <th style="border: 1px solid #000000; padding: 12px; text-align: center; background-color: #f5f5f5;">Total Price</th>
+                </tr>
+            </thead>
+            <tbody>
+                ${itemsHTML}
+            </tbody>
+        </table>
+        <br>
+        <br>
+        <p style="font-size: 14px; text-align: right;"><strong>Tax: </strong>$ ${totalTax.toFixed(2)}</p>
+        <p style="font-size: 14px; text-align: right;"><strong>Total Amount: </strong>$ ${totalAmount.toFixed(2)}</p>
+        <p style="font-size: 14px; text-align: right;"><strong>Outstanding Balance: </strong>$ ${outstandingBalance.toFixed(2)}</p>
+        <div style="text-align: center;">
+            <p style="font-size: 14px; text-align:center;">Bank: ANZ</p>
+            <p style="font-size: 14px; text-align:center;">BSB: 012370</p>
+            <p style="font-size: 14px; text-align:center;">Account: 154730647</p><br><br>
+           
+                <p style="font-size: 10px; margin: 0; text-align: center; color: #B0B0B0; ">This is an auto-generated invoice and doesn't bear any signature.</p>
+           
+        </div>
+    ;
+
+    const element = document.createElement('div');
+    element.innerHTML = invoiceHTML;
+    html2pdf().from(element).set({
+        margin: 1,
+        filename: pratikshya_invoice_${invoiceNo}.pdf,
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2 },
+        jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+    }).save();
+}
+
     </script>
 </body>
 </html>
-
