@@ -122,26 +122,23 @@
             <thead>
                 <tr>
                     <th>Date</th>
-                    <th>Support Item No.</th>
-                    <th>Support Item Name</th>
-                                        <th>Service Group Name</th>
-                    <th>Budget Category</th>
-
+                    <th>Item</th>
+                    <th>Type</th>
+                    
                     <th>Unit Price</th>
                     <th>Hours</th>
+                    <th>Tax</th>
                     <th>Total Price</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
                      <td><input type="date" class="date"></td>
-                    <td><input type="text" class="SupportItemNo" value="15_053_0128_1_3" readonly></td>
-                    <td><input type="text" class="SupportItemName" value="Therapy Assistant - Level 2" readonly></td>
-                                        <td><input type="text" class="ServiceGroupName" value="Therapeutic Supports" readonly></td>
-                                        <td><input type="text" class="BudgetCategory" value="Improved Daily Living Skills" readonly> </td>
-
+                    <td><input type="text" class="item"></td>
+                    <td><input type="text" class="type"></td>
                 <td><input type="number" class="unit-price" oninput="calculateTotal(this)"></td>
                     <td><input type="number" class="hours" oninput="calculateTotal(this)"></td>
+                    <td><input type="number" class="tax" oninput="calculateTotal(this)"></td>
                     <td class="total-price"> $ 0</td>
                 </tr>
             </tbody>
@@ -157,7 +154,8 @@
             const row = element.closest('tr');
             const unitPrice = parseFloat(row.querySelector('.unit-price').value) || 0;
             const hours = parseFloat(row.querySelector('.hours').value) || 0;
-            const totalPrice = unitPrice * hours;
+            const tax = parseFloat(row.querySelector('.tax').value) || 0;
+            const totalPrice = (unitPrice * hours) + tax;
             row.querySelector('.total-price').textContent = totalPrice.toFixed(2);
         }
 
@@ -166,13 +164,12 @@
             const newRow = document.createElement('tr');
             newRow.innerHTML = 
              <td><input type="date" class="date"></td>
-                <td><input type="text" class="SupportItemNo"></td>
-                <td><input type="text" class="SupportItemName"></td>
-                               <td><input type="text" class="ServiceGroupName"></td>
-                               <td><input type="text" class="BudgetCategory"></td>
-
+                <td><input type="text" class="item"></td>
+                <td><input type="text" class="type"></td>
+               
                 <td><input type="number" class="unit-price" oninput="calculateTotal(this)"></td>
                 <td><input type="number" class="hours" oninput="calculateTotal(this)"></td>
+                <td><input type="number" class="tax" oninput="calculateTotal(this)"></td>
                 <td class="total-price"> $ 0</td>
             ;
             table.appendChild(newRow);
@@ -184,37 +181,35 @@
 
     const rows = document.querySelectorAll('#invoiceTable tbody tr');
     let itemsHTML = '';
+    let totalTax = 0;
     let totalAmount = 0;
 
     rows.forEach(row => {
         const date = row.querySelector('.date').value;
-        const SupportItemNo = row.querySelector('.SupportItemNo').value;
-                const SupportItemName = row.querySelector('.SupportItemName').value;
-                const ServiceGroupName = row.querySelector('.ServiceGroupName').value;
-                const BudgetCategory = row.querySelector('.BudgetCategory').value;
-
+        const item = row.querySelector('.item').value;
+        const type = row.querySelector('.type').value;
         const unitPrice = parseFloat(row.querySelector('.unit-price').value) || 0;
         const hours = parseFloat(row.querySelector('.hours').value) || 0;
+        const tax = parseFloat(row.querySelector('.tax').value) || 0;
         const totalPrice = parseFloat(row.querySelector('.total-price').textContent.replace('$ ', '')) || 0;
         
+        totalTax += tax;
         totalAmount += totalPrice;
 
         itemsHTML += 
             <tr style="border: 1px solid #e0e0e0;">
                 <td style="padding: 10px; border: 1px solid #000000; text-align: center; vertical-align: middle;">${date}</td>
-                <td style="padding: 10px; border: 1px solid #000000; text-align: center; vertical-align: middle;">${SupportItemNo}</td>
-                <td style="padding: 10px; border: 1px solid #000000; text-align: center; vertical-align: middle;">${SupportItemName}</td>
-                <td style="padding: 10px; border: 1px solid #000000; text-align: center; vertical-align: middle;">${ServiceGroupName}</td>
-                <td style="padding: 10px; border: 1px solid #000000; text-align: center; vertical-align: middle;">${BudgetCategory}</td>
-
+                <td style="padding: 10px; border: 1px solid #000000; text-align: center; vertical-align: middle;">${item}</td>
+                <td style="padding: 10px; border: 1px solid #000000; text-align: center; vertical-align: middle;">${type}</td>
                 <td style="padding: 10px; border: 1px solid #000000; text-align: center; vertical-align: middle;">${unitPrice.toFixed(2)}</td>
                 <td style="padding: 10px; border: 1px solid #000000; text-align: center; vertical-align: middle;">${hours}</td>
+                <td style="padding: 10px; border: 1px solid #000000; text-align: center; vertical-align: middle;">${tax.toFixed(2)}</td>
                 <td style="padding: 10px; border: 1px solid #000000; text-align: center; vertical-align: middle;">$ ${totalPrice.toFixed(2)}</td>
             </tr>
         ;
     });
 
-    const outstandingBalance = totalAmount;
+    const outstandingBalance = totalAmount - totalTax;
 
     const invoiceHTML = 
         <div style="text-align: center;">
@@ -240,13 +235,11 @@
             <thead>
                 <tr>
                     <th style="border: 1px solid #000000; padding: 12px; text-align: center; background-color: #f5f5f5;">Date</th>
-                    <th style="border: 1px solid #000000; padding: 12px; text-align: center; background-color: #f5f5f5;">Support Item No</th>
-                    <th style="border: 1px solid #000000; padding: 12px; text-align: center; background-color: #f5f5f5;">Support Item Name</th>
-                    <th style="border: 1px solid #000000; padding: 12px; text-align: center; background-color: #f5f5f5;">Service Group Name</th>
-                            <th style="border: 1px solid #000000; padding: 12px; text-align: center; background-color: #f5f5f5;">Budget Category</th>
+                    <th style="border: 1px solid #000000; padding: 12px; text-align: center; background-color: #f5f5f5;">Item</th>
+                    <th style="border: 1px solid #000000; padding: 12px; text-align: center; background-color: #f5f5f5;">Type</th>
                     <th style="border: 1px solid #000000; padding: 12px; text-align: center; background-color: #f5f5f5;">Unit Price</th>
-
                     <th style="border: 1px solid #000000; padding: 12px; text-align: center; background-color: #f5f5f5;">Hours</th>
+                    <th style="border: 1px solid #000000; padding: 12px; text-align: center; background-color: #f5f5f5;">Tax</th>
                     <th style="border: 1px solid #000000; padding: 12px; text-align: center; background-color: #f5f5f5;">Total Price</th>
                 </tr>
             </thead>
@@ -256,6 +249,7 @@
         </table>
         <br>
         <br>
+        <p style="font-size: 14px; text-align: right;"><strong>Tax: </strong>$ ${totalTax.toFixed(2)}</p>
         <p style="font-size: 14px; text-align: right;"><strong>Total Amount: </strong>$ ${totalAmount.toFixed(2)}</p>
         <p style="font-size: 14px; text-align: right;"><strong>Outstanding Balance: </strong>$ ${outstandingBalance.toFixed(2)}</p>
         <div style="text-align: center;">
